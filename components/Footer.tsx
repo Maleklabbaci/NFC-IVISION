@@ -1,6 +1,6 @@
 import React from 'react';
 import { LOGO_URL, SOCIAL_LINKS } from '../constants';
-import { Instagram, Linkedin, Facebook, Twitter, Heart } from 'lucide-react';
+import { Instagram, Linkedin, Facebook, Heart } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -20,7 +20,6 @@ const Footer: React.FC = () => {
               <a href={SOCIAL_LINKS.instagram} className="text-gray-400 hover:text-white transition-colors"><Instagram size={20} /></a>
               <a href={SOCIAL_LINKS.linkedin} className="text-gray-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
               <a href={SOCIAL_LINKS.facebook} className="text-gray-400 hover:text-white transition-colors"><Facebook size={20} /></a>
-              <a href={SOCIAL_LINKS.twitter} className="text-gray-400 hover:text-white transition-colors"><Twitter size={20} /></a>
             </div>
           </div>
 

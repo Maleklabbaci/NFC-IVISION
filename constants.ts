@@ -1,4 +1,4 @@
-import { LayoutDashboard, Megaphone, BarChart3, Globe, PenTool, Smartphone } from 'lucide-react';
+import { LayoutDashboard, Megaphone, ChartBar, Globe, PenTool, Smartphone } from 'lucide-react';
 
 // Contact Information
 export const CONTACT_INFO = {
@@ -13,7 +13,7 @@ export const SOCIAL_LINKS = {
   instagram: "https://instagram.com/ivisionagency",
   linkedin: "https://linkedin.com/company/ivisionagency",
   facebook: "https://facebook.com/ivisionagency",
-  twitter: "https://twitter.com/ivisionagency",
+  tiktok: "https://tiktok.com/@ivisionagency",
 };
 
 // Logo URL (Using the uploaded logo logic - assuming user replaces this or uses the one they have)
@@ -52,6 +52,6 @@ export const SERVICES = [
   {
     title: "SEO & Analyse",
     description: "Améliorez votre visibilité sur Google et suivez vos performances avec des rapports détaillés.",
-    icon: BarChart3,
+    icon: ChartBar,
   },
 ];

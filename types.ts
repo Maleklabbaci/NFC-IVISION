@@ -1,5 +1,3 @@
-import { LucideIcon } from 'lucide-react';
-
 export interface Service {
   title: string;
   description: string;
@@ -22,7 +20,7 @@ export interface SocialLinks {
   instagram: string;
   linkedin: string;
   facebook: string;
-  twitter: string;
+  tiktok: string;
   website: string;
 }
 

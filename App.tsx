@@ -3,11 +3,25 @@ import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL } from './constants';
 import { AppData } from './types';
 import { 
   Phone, Mail, MapPin, Globe, 
-  Instagram, Linkedin, Facebook, Twitter, 
+  Instagram, Linkedin, Facebook, 
   MessageCircle, ExternalLink, ChevronRight, Share2,
-  Lock, Save, RotateCcw, X, Edit3, Image as ImageIcon,
+  Lock, Save, RotateCcw, X, Pencil, Image as ImageIcon,
   Palette, Type, EyeOff, Download
 } from 'lucide-react';
+
+// Custom TikTok Icon since Lucide doesn't always have brand icons consistent or available in all sets
+const TikTokIcon = ({ size = 20, className = "" }: { size?: number, className?: string }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="currentColor" 
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" />
+  </svg>
+);
 
 // --- DEFAULT DATA (Factory Settings) ---
 const DEFAULT_DATA: AppData = {
@@ -25,7 +39,7 @@ const DEFAULT_DATA: AppData = {
     instagram: SOCIAL_LINKS.instagram,
     linkedin: SOCIAL_LINKS.linkedin,
     facebook: SOCIAL_LINKS.facebook,
-    twitter: SOCIAL_LINKS.twitter,
+    tiktok: SOCIAL_LINKS.tiktok,
     website: "https://ivision-agency.com",
   },
   colors: {
@@ -50,7 +64,18 @@ function App() {
     const savedData = localStorage.getItem('ivision_card_data');
     if (savedData) {
       try {
-        setData(JSON.parse(savedData));
+        const parsed = JSON.parse(savedData);
+        // Ensure migration if old data exists (e.g. twitter instead of tiktok)
+        if (!parsed.social.tiktok && parsed.social.twitter) {
+           parsed.social.tiktok = ""; // Start empty or migrate if you wanted
+           delete parsed.social.twitter;
+        }
+        // Merge with default to ensure structure validity if new fields added
+        setData(prev => ({
+            ...prev,
+            ...parsed,
+            social: { ...prev.social, ...parsed.social }
+        }));
       } catch (e) {
         console.error("Failed to parse saved data", e);
       }
@@ -215,7 +240,7 @@ END:VCARD`;
             <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-gray-100 p-4 flex justify-between items-center z-50">
               <h2 className="font-bold text-lg flex items-center gap-2 text-gray-900">
                 <div className="w-8 h-8 bg-[var(--brand-color)] rounded-lg flex items-center justify-center text-white">
-                    <Edit3 size={16} />
+                    <Pencil size={16} />
                 </div>
                 Éditeur
               </h2>
@@ -336,7 +361,7 @@ END:VCARD`;
                   <SocialInput icon={Instagram} label="Instagram" value={data.social.instagram} onChange={(v) => updateField('social', 'instagram', v)} />
                   <SocialInput icon={Linkedin} label="LinkedIn" value={data.social.linkedin} onChange={(v) => updateField('social', 'linkedin', v)} />
                   <SocialInput icon={Facebook} label="Facebook" value={data.social.facebook} onChange={(v) => updateField('social', 'facebook', v)} />
-                  <SocialInput icon={Twitter} label="Twitter / X" value={data.social.twitter} onChange={(v) => updateField('social', 'twitter', v)} />
+                  <SocialInput icon={TikTokIcon} label="TikTok" value={data.social.tiktok} onChange={(v) => updateField('social', 'tiktok', v)} />
                   <SocialInput icon={Globe} label="Site Web" value={data.social.website} onChange={(v) => updateField('social', 'website', v)} />
                 </div>
               </section>
@@ -486,13 +511,13 @@ END:VCARD`;
               />
             )}
             
-            {data.social.twitter && (
+            {data.social.tiktok && (
               <LinkCard 
-                href={data.social.twitter}
-                icon={Twitter}
-                label="Twitter / X"
+                href={data.social.tiktok}
+                icon={TikTokIcon}
+                label="TikTok"
                 brandColor={data.colors.primary}
-                gradient="from-gray-900 to-gray-700"
+                gradient="from-black to-gray-800"
               />
             )}
 
