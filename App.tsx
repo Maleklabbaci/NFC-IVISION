@@ -6,7 +6,7 @@ import {
   Instagram, Linkedin, Facebook, 
   MessageCircle, ExternalLink, ChevronRight, Share2,
   Lock, Save, RotateCcw, X, Pencil, Image as ImageIcon,
-  Palette, Type, EyeOff, Download
+  Download
 } from 'lucide-react';
 
 // Custom TikTok Icon since Lucide doesn't always have brand icons consistent or available in all sets
