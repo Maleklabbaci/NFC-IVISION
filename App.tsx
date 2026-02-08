@@ -7,17 +7,24 @@ import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL, SERVICES } from './constants.ts';
 
 function App() {
   const handleDownloadVCard = () => {
+    // Clean phone number for vCard property (remove spaces for better compatibility)
+    const cleanPhone = CONTACT_INFO.phone.replace(/\s/g, '');
+    
     // vCard standard requires CRLF line breaks
+    // Added N (Name), TITLE, and NOTE fields for a more complete contact card
     const vcardContent = [
       'BEGIN:VCARD',
       'VERSION:3.0',
       'FN:iVision Agency',
+      'N:Agency;iVision;;;',
       'ORG:iVision Agency',
-      `TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phone}`,
-      `EMAIL;TYPE=WORK:${CONTACT_INFO.email}`,
-      `URL:${SOCIAL_LINKS.website}`, 
+      'TITLE:Agence de Marketing Digital',
+      `TEL;TYPE=WORK,VOICE:${cleanPhone}`,
+      `EMAIL;TYPE=WORK,INTERNET:${CONTACT_INFO.email}`,
+      `URL;TYPE=WORK:${SOCIAL_LINKS.website}`, 
       // Escape commas in address with backslash (doubled for JS string)
       `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\\,')};;;;`,
+      `NOTE:Services: ${SERVICES.map(s => s.title).join(', ')}`,
       'END:VCARD'
     ].join('\r\n');
 
@@ -71,7 +78,7 @@ function App() {
                 {/* Header Profil */}
                 <div className="pt-10 px-6 pb-6 text-center relative">
                     <div className="relative mx-auto w-28 h-28 mb-4 group cursor-pointer">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-400 to-purple-500 rounded-full animate-spin-slow blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
+                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-400 to-purple-500 rounded-full animate-spin blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
                         <div className="relative w-full h-full bg-white p-1 rounded-full overflow-hidden">
                             <img 
                                 src={LOGO_URL} 

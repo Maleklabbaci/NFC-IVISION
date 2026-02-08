@@ -14,7 +14,7 @@ export const SOCIAL_LINKS = {
   linkedin: "", // Pas encore
   facebook: "https://www.facebook.com/agencyivision/",
   tiktok: "", // Pas encore
-  website: "https://ivision.agency",
+  website: "https://website-i-vision.vercel.app/",
 };
 
 // Logo URL
