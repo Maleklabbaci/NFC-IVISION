@@ -2,56 +2,44 @@ import { LayoutDashboard, Megaphone, ChartBar, Globe, PenTool, Smartphone } from
 
 // Contact Information
 export const CONTACT_INFO = {
-  phone: "+33 6 12 34 56 78", // Placeholder phone
-  email: "contact@ivision-agency.com", // Placeholder email
-  address: "123 Avenue du Numérique, 75001 Paris, France",
-  whatsapp: "https://wa.me/33612345678",
+  phone: "+213 563 83 94 04",
+  email: "contact@ivision.agency",
+  address: "Tipaza, Algérie",
+  whatsapp: "https://wa.me/213563839404",
 };
 
 // Social Media Links
 export const SOCIAL_LINKS = {
-  instagram: "https://instagram.com/ivisionagency",
-  linkedin: "https://linkedin.com/company/ivisionagency",
-  facebook: "https://facebook.com/ivisionagency",
-  tiktok: "https://tiktok.com/@ivisionagency",
+  instagram: "https://www.instagram.com/ivision_agency/",
+  linkedin: "", // Pas encore
+  facebook: "https://www.facebook.com/agencyivision/",
+  tiktok: "", // Pas encore
+  website: "https://ivision.agency",
 };
 
-// Logo URL (Using the uploaded logo logic - assuming user replaces this or uses the one they have)
-// Ideally, the user would host the image they uploaded. For now, I will use a variable they can swap.
-// Since I cannot reference the local upload directly in code without a URL, I will use a placeholder 
-// that mimics the style or allow them to paste the URL.
-export const LOGO_URL = "https://i.imgur.com/8Qj9K9s.png"; // Based on the user prompt's visual context if available, otherwise generic.
+// Logo URL
+export const LOGO_URL = "https://i.ibb.co/zHJBDrDT/i-VISIONLOGO.png";
 
 // Services Data
 export const SERVICES = [
   {
-    title: "Stratégie Digitale",
-    description: "Des plans sur mesure pour positionner votre marque et atteindre vos objectifs commerciaux.",
+    title: "Marketing digital complet",
+    description: "Une stratégie 360° pour booster votre visibilité et votre croissance en ligne.",
     icon: LayoutDashboard,
   },
   {
-    title: "Gestion des Réseaux Sociaux",
-    description: "Engagez votre communauté avec du contenu créatif et une gestion proactive sur Instagram, LinkedIn et TikTok.",
-    icon: Smartphone,
-  },
-  {
-    title: "Publicité en Ligne (Ads)",
-    description: "Campagnes Facebook, Instagram et Google Ads optimisées pour un ROI maximal.",
-    icon: Megaphone,
-  },
-  {
-    title: "Création de Site Web",
-    description: "Sites vitrines et e-commerce modernes, rapides et optimisés pour le référencement (SEO).",
-    icon: Globe,
-  },
-  {
-    title: "Branding & Design",
-    description: "Identité visuelle forte, logos et chartes graphiques qui marquent les esprits.",
+    title: "Création de contenu",
+    description: "Design graphique et production vidéo pour captiver votre audience (Design & Vidéo).",
     icon: PenTool,
   },
   {
-    title: "SEO & Analyse",
-    description: "Améliorez votre visibilité sur Google et suivez vos performances avec des rapports détaillés.",
-    icon: ChartBar,
+    title: "Sponsoring Meta Ads",
+    description: "Campagnes publicitaires performantes sur Facebook et Instagram pour maximiser votre ROI.",
+    icon: Megaphone,
+  },
+  {
+    title: "Website e-commerce et vitrine",
+    description: "Conception de sites web modernes et optimisés pour vendre et convaincre.",
+    icon: Globe,
   },
 ];
