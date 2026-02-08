@@ -7,11 +7,12 @@ import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL, SERVICES } from './constants.ts';
 
 function App() {
   const handleDownloadVCard = () => {
-    // Clean phone number for vCard property (remove spaces for better compatibility)
-    const cleanPhone = CONTACT_INFO.phone.replace(/\s/g, '');
+    // Nettoyage rapide du numéro pour le format international
+    const cleanPhone = CONTACT_INFO.phone.replace(/[^\d+]/g, '');
+    const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
     
-    // vCard standard requires CRLF line breaks
-    // Added N (Name), TITLE, and NOTE fields for a more complete contact card
+    // Construction optimisée de la vCard (Version 3.0 Standard)
+    // Structure allégée pour un téléchargement instantané
     const vcardContent = [
       'BEGIN:VCARD',
       'VERSION:3.0',
@@ -19,28 +20,31 @@ function App() {
       'N:Agency;iVision;;;',
       'ORG:iVision Agency',
       'TITLE:Agence de Marketing Digital',
-      `TEL;TYPE=WORK,VOICE:${cleanPhone}`,
+      `TEL;TYPE=WORK,VOICE,PREF:${cleanPhone}`,
       `EMAIL;TYPE=WORK,INTERNET:${CONTACT_INFO.email}`,
       `URL;TYPE=WORK:${SOCIAL_LINKS.website}`, 
-      // Escape commas in address with backslash (doubled for JS string)
       `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\\,')};;;;`,
-      `NOTE:Services: ${SERVICES.map(s => s.title).join(', ')}`,
+      'NOTE:Marketing Digital • Stratégie • Création • Ads • Web',
+      `REV:${timestamp}`,
       'END:VCARD'
     ].join('\r\n');
 
     const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8' });
     const url = URL.createObjectURL(blob);
+    
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'contact-ivision.vcf');
+    link.setAttribute('download', 'iVision-Contact.vcf');
     document.body.appendChild(link);
+    
+    // Déclenchement direct
     link.click();
     
-    // Cleanup with a small delay to ensure download starts on mobile
+    // Nettoyage
     setTimeout(() => {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-    }, 100);
+    }, 200);
   };
 
   const handleShare = async () => {
