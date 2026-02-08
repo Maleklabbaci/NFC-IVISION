@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from './Button';
-import { CONTACT_INFO, SOCIAL_LINKS } from '../constants';
+import Button from './Button.tsx';
+import { CONTACT_INFO, SOCIAL_LINKS } from '../constants.ts';
 import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Send } from 'lucide-react';
 
 const Contact: React.FC = () => {

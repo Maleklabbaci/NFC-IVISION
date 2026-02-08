@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, Mail } from 'lucide-react';
-import { LOGO_URL, CONTACT_INFO } from '../constants';
-import Button from './Button';
+import { LOGO_URL, CONTACT_INFO } from '../constants.ts';
+import Button from './Button.tsx';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);

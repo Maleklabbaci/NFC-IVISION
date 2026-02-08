@@ -1,5 +1,5 @@
 import React from 'react';
-import { LOGO_URL, SOCIAL_LINKS } from '../constants';
+import { LOGO_URL, SOCIAL_LINKS } from '../constants.ts';
 import { Instagram, Linkedin, Facebook, Heart } from 'lucide-react';
 
 const Footer: React.FC = () => {

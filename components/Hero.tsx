@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './Button';
+import Button from './Button.tsx';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 
 const Hero: React.FC = () => {
