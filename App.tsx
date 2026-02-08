@@ -7,6 +7,7 @@ import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL, SERVICES } from './constants';
 
 function App() {
   const handleDownloadVCard = () => {
+    // vCard standard requires CRLF line breaks
     const vcardContent = [
       'BEGIN:VCARD',
       'VERSION:3.0',
@@ -15,9 +16,10 @@ function App() {
       `TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phone}`,
       `EMAIL;TYPE=WORK:${CONTACT_INFO.email}`,
       `URL:${SOCIAL_LINKS.website}`, 
-      `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\,')};;;;`,
+      // Escape commas in address with backslash (doubled for JS string)
+      `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\\,')};;;;`,
       'END:VCARD'
-    ].join('\n');
+    ].join('\r\n');
 
     const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -26,7 +28,12 @@ function App() {
     link.setAttribute('download', 'contact-ivision.vcf');
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    
+    // Cleanup with a small delay to ensure download starts on mobile
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 100);
   };
 
   const handleShare = async () => {
@@ -41,7 +48,9 @@ function App() {
         console.error('Erreur lors du partage:', err);
       }
     } else {
-      alert('Copié dans le presse-papier !');
+      // Fallback for desktop or unsupported browsers
+      navigator.clipboard.writeText(window.location.href);
+      alert('Lien copié dans le presse-papier !');
     }
   };
 
