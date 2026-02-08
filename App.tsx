@@ -1,55 +1,96 @@
 import React from 'react';
 import { 
   Phone, Mail, MapPin, Share2, Download, 
-  Instagram, Linkedin, Facebook, MessageCircle, ArrowUpRight, Globe
+  Instagram, Linkedin, Facebook, MessageCircle, ArrowUpRight, Globe,
+  LayoutDashboard, Megaphone, PenTool
 } from 'lucide-react';
-import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL, SERVICES } from './constants.ts';
+
+// Données inlinées pour éviter les erreurs de chargement de module externe
+const CONTACT_INFO = {
+  phone: "+213 563 83 94 04",
+  email: "contact@ivision.agency",
+  address: "Tipaza, Algérie",
+  whatsapp: "https://wa.me/213563839404",
+};
+
+const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/ivision_agency/",
+  linkedin: "", 
+  facebook: "https://www.facebook.com/agencyivision/",
+  tiktok: "",
+  website: "https://website-i-vision.vercel.app/",
+};
+
+const LOGO_URL = "https://i.ibb.co/zHJBDrDT/i-VISIONLOGO.png";
+
+const SERVICES = [
+  {
+    title: "Marketing digital complet",
+    description: "Stratégie 360° pour booster votre visibilité.",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Création de contenu",
+    description: "Design & Vidéo pour captiver votre audience.",
+    icon: PenTool,
+  },
+  {
+    title: "Sponsoring Meta Ads",
+    description: "Campagnes ROIstes Facebook & Instagram.",
+    icon: Megaphone,
+  },
+  {
+    title: "Website & E-commerce",
+    description: "Sites web performants et modernes.",
+    icon: Globe,
+  },
+];
 
 function App() {
   const handleDownloadVCard = () => {
-    // 1. Préparation rapide des données
-    const cleanPhone = CONTACT_INFO.phone.replace(/[^\d+]/g, '');
-    // Timestamp pour forcer la mise à jour si le contact existe déjà
-    const revDate = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    try {
+      // 1. Préparation des données
+      const cleanPhone = CONTACT_INFO.phone.replace(/[^\d+]/g, '');
+      const revDate = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 
-    // 2. Construction du vCard (Standard V3.0 pour compatibilité max iOS/Android)
-    const vcardRows = [
-      'BEGIN:VCARD',
-      'VERSION:3.0',
-      'FN:iVision Agency',                   // Nom complet affiché
-      'N:Agency;iVision;;;',                 // Structure Nom;Prénom...
-      'ORG:iVision Agency',                  // Entreprise
-      'TITLE:Agence de Marketing Digital',   // Titre
-      `TEL;TYPE=WORK,VOICE,PREF:${cleanPhone}`,
-      `EMAIL;TYPE=WORK,INTERNET:${CONTACT_INFO.email}`,
-      `URL;TYPE=WORK:${SOCIAL_LINKS.website}`,
-      // Echappement des virgules dans l'adresse
-      `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\\,')};;;;`,
-      // Liste des services dans les notes
-      `NOTE:Expertise: ${SERVICES.map(s => s.title).join(' • ')}`,
-      `REV:${revDate}`,                      // Date de révision
-      'END:VCARD'
-    ];
+      // 2. Construction de la vCard (Format V3.0 compatible iOS/Android)
+      // Utilisation de \n pour assurer la compatibilité universelle
+      const vcardRows = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'FN:iVision Agency',
+        'N:Agency;iVision;;;',
+        'ORG:iVision Agency',
+        'TITLE:Agence Marketing Digital',
+        `TEL;TYPE=WORK,VOICE:${cleanPhone}`,
+        `EMAIL;TYPE=WORK:${CONTACT_INFO.email}`,
+        `URL;TYPE=WORK:${SOCIAL_LINKS.website}`,
+        `ADR;TYPE=WORK:;;${CONTACT_INFO.address};;;;`,
+        `NOTE:Marketing Digital • Branding • Ads • Web`,
+        `REV:${revDate}`,
+        'END:VCARD'
+      ];
 
-    const vcardString = vcardRows.join('\r\n');
-    const blob = new Blob([vcardString], { type: 'text/vcard;charset=utf-8' });
-    
-    // 3. Déclenchement du téléchargement universel
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.style.display = 'none';
-    link.href = url;
-    link.setAttribute('download', 'contact-ivision.vcf');
-    
-    // Ajout au DOM nécessaire pour certains navigateurs mobiles (Firefox Android, etc.)
-    document.body.appendChild(link);
-    link.click();
-    
-    // 4. Nettoyage
-    setTimeout(() => {
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    }, 100);
+      const vcardString = vcardRows.join('\n');
+      const blob = new Blob([vcardString], { type: 'text/vcard;charset=utf-8' });
+      
+      // 3. Téléchargement robuste
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'iVision-Contact.vcf');
+      document.body.appendChild(link);
+      link.click();
+      
+      // 4. Nettoyage
+      setTimeout(() => {
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }, 500);
+    } catch (error) {
+      console.error("Erreur lors du téléchargement de la vCard:", error);
+      alert("Impossible de télécharger la carte de visite. Veuillez réessayer.");
+    }
   };
 
   const handleShare = async () => {
@@ -61,28 +102,27 @@ function App() {
           url: window.location.href,
         });
       } catch (err) {
-        console.error('Erreur lors du partage:', err);
+        console.log('Partage annulé');
       }
     } else {
-      // Fallback
       navigator.clipboard.writeText(window.location.href);
-      alert('Lien copié dans le presse-papier !');
+      alert('Lien copié !');
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 relative flex items-center justify-center p-4 font-sans">
+    <div className="min-h-screen bg-slate-50 relative flex items-center justify-center p-4 font-sans overflow-hidden">
         
-        {/* Arrière-plan animé fluide (Blobs) */}
+        {/* Arrière-plan animé fluide */}
         <div className="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
             <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
             <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
             <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
         </div>
 
-        {/* Carte Principale Glassmorphism */}
+        {/* Carte Principale */}
         <div className="w-full max-w-sm z-10 animate-fade-up my-4">
-            <div className="backdrop-blur-2xl bg-white/70 rounded-[2.5rem] shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/50 overflow-hidden relative">
+            <div className="backdrop-blur-2xl bg-white/80 rounded-[2.5rem] shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/60 overflow-hidden relative">
                 
                 {/* Header Profil */}
                 <div className="pt-10 px-6 pb-6 text-center relative">
@@ -106,56 +146,53 @@ function App() {
 
                 {/* Grille d'Actions Rapides */}
                 <div className="grid grid-cols-4 gap-3 px-6 mb-8">
-                    {[
-                        { icon: Phone, label: "Appel", href: `tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`, color: "bg-green-100 text-green-600" },
-                        { icon: Mail, label: "Email", href: `mailto:${CONTACT_INFO.email}`, color: "bg-blue-100 text-blue-600" },
-                        { icon: MessageCircle, label: "Chat", href: CONTACT_INFO.whatsapp, color: "bg-emerald-100 text-emerald-600" },
-                        { icon: MapPin, label: "Plan", href: `https://maps.google.com/?q=${CONTACT_INFO.address}`, color: "bg-orange-100 text-orange-600" }
-                    ].map((item, index) => (
-                        <a 
-                            key={index} 
-                            href={item.href}
-                            className="flex flex-col items-center gap-2 group transition-transform hover:-translate-y-1"
-                        >
-                            <div className={`w-14 h-14 rounded-2xl ${item.color} flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300`}>
-                                <item.icon size={22} strokeWidth={2} />
-                            </div>
-                            <span className="text-[11px] font-semibold text-slate-500 group-hover:text-slate-800 transition-colors">{item.label}</span>
-                        </a>
-                    ))}
+                    <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`} className="flex flex-col items-center gap-2 group transition-transform hover:-translate-y-1">
+                        <div className="w-14 h-14 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <Phone size={22} strokeWidth={2} />
+                        </div>
+                        <span className="text-[11px] font-semibold text-slate-500 group-hover:text-slate-800">Appel</span>
+                    </a>
+                    <a href={`mailto:${CONTACT_INFO.email}`} className="flex flex-col items-center gap-2 group transition-transform hover:-translate-y-1">
+                        <div className="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <Mail size={22} strokeWidth={2} />
+                        </div>
+                        <span className="text-[11px] font-semibold text-slate-500 group-hover:text-slate-800">Email</span>
+                    </a>
+                    <a href={CONTACT_INFO.whatsapp} className="flex flex-col items-center gap-2 group transition-transform hover:-translate-y-1">
+                        <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <MessageCircle size={22} strokeWidth={2} />
+                        </div>
+                        <span className="text-[11px] font-semibold text-slate-500 group-hover:text-slate-800">Chat</span>
+                    </a>
+                    <a href={`https://maps.google.com/?q=${CONTACT_INFO.address}`} className="flex flex-col items-center gap-2 group transition-transform hover:-translate-y-1">
+                        <div className="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <MapPin size={22} strokeWidth={2} />
+                        </div>
+                        <span className="text-[11px] font-semibold text-slate-500 group-hover:text-slate-800">Plan</span>
+                    </a>
                 </div>
 
-                {/* Social Bar (Filtré) */}
+                {/* Social Bar */}
                 <div className="px-6 mb-8">
                     <div className="bg-slate-50/80 rounded-2xl p-2 flex justify-center gap-4 items-center backdrop-blur-sm">
-                         {[
-                            { icon: Instagram, href: SOCIAL_LINKS.instagram, color: "hover:text-pink-600" },
-                            { icon: Facebook, href: SOCIAL_LINKS.facebook, color: "hover:text-blue-600" },
-                            { icon: Globe, href: SOCIAL_LINKS.website, color: "hover:text-brand-blue" },
-                            { icon: Linkedin, href: SOCIAL_LINKS.linkedin, color: "hover:text-blue-700" },
-                            { icon: "tiktok", href: SOCIAL_LINKS.tiktok, color: "hover:text-black" }
-                        ]
-                        .filter(social => social.href && social.href !== "") 
-                        .map((social, i) => (
-                            <a 
-                                key={i}
-                                href={social.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`p-3 text-slate-400 ${social.color} hover:bg-white hover:shadow-sm rounded-xl transition-all duration-300 transform hover:scale-110`}
-                            >
-                                {social.icon === "tiktok" ? (
-                                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
-                                ) : (
-                                    // @ts-ignore
-                                    <social.icon size={20} strokeWidth={2.5} />
-                                )}
+                        <a href={SOCIAL_LINKS.instagram} className="p-3 text-slate-400 hover:text-pink-600 hover:bg-white rounded-xl transition-all duration-300 transform hover:scale-110">
+                            <Instagram size={20} strokeWidth={2.5} />
+                        </a>
+                        <a href={SOCIAL_LINKS.facebook} className="p-3 text-slate-400 hover:text-blue-600 hover:bg-white rounded-xl transition-all duration-300 transform hover:scale-110">
+                            <Facebook size={20} strokeWidth={2.5} />
+                        </a>
+                        <a href={SOCIAL_LINKS.website} className="p-3 text-slate-400 hover:text-brand-blue hover:bg-white rounded-xl transition-all duration-300 transform hover:scale-110">
+                            <Globe size={20} strokeWidth={2.5} />
+                        </a>
+                        {SOCIAL_LINKS.linkedin && (
+                            <a href={SOCIAL_LINKS.linkedin} className="p-3 text-slate-400 hover:text-blue-700 hover:bg-white rounded-xl transition-all duration-300 transform hover:scale-110">
+                                <Linkedin size={20} strokeWidth={2.5} />
                             </a>
-                        ))}
+                        )}
                     </div>
                 </div>
 
-                {/* Section Services Compacte */}
+                {/* Services */}
                 <div className="px-6 pb-6">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 ml-1">Nos Services</h3>
                     <div className="space-y-3">
