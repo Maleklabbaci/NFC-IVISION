@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { 
   Phone, Mail, MapPin, Share2, Download, 
@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Megaphone, PenTool
 } from 'lucide-react';
 
-// --- CONSTANTES (Intégrées pour éviter les erreurs d'import) ---
+// --- CONSTANTES ---
 
 const CONTACT_INFO = {
   phone: "+213 563 83 94 04",
@@ -20,7 +20,7 @@ const SOCIAL_LINKS = {
   linkedin: "", 
   facebook: "https://www.facebook.com/agencyivision/",
   tiktok: "", 
-  website: "https://ivision.agency",
+  website: "https://website-i-vision.vercel.app/",
 };
 
 const LOGO_URL = "https://i.ibb.co/zHJBDrDT/i-VISIONLOGO.png";
@@ -48,62 +48,56 @@ const SERVICES = [
   },
 ];
 
-// --- COMPOSANT APP ---
+// --- APP PRINCIPALE ---
 
 function App() {
+
   const handleDownloadVCard = async () => {
-    // Création du contenu vCard optimisé
+    // Construction de la vCard (Format V3.0 universel)
     const vcardContent = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      'FN;CHARSET=UTF-8:iVision Agency',
-      'ORG;CHARSET=UTF-8:iVision Agency',
+      'FN:iVision Agency',
+      'ORG:iVision Agency',
       `TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phone}`,
       `EMAIL;TYPE=WORK:${CONTACT_INFO.email}`,
       `URL:${SOCIAL_LINKS.website}`, 
-      `ADR;TYPE=WORK;CHARSET=UTF-8:;;${CONTACT_INFO.address};;;;`,
+      `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\\,')};;;;`,
       'END:VCARD'
-    ].join('\n'); // Utilisation de \n simple pour compatibilité universelle
+    ].join('\r\n');
 
     const fileName = "contact-ivision.vcf";
     const mimeType = "text/vcard";
+    const file = new File([vcardContent], fileName, { type: mimeType });
 
-    // Méthode 1 : API de Partage Native (iOS / Android récents)
-    try {
-      const file = new File([vcardContent], fileName, { type: mimeType });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    // 1. Essayer le partage natif (Meilleur pour iOS/Android récents)
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
         await navigator.share({
           files: [file],
-          title: 'Contact iVision Agency',
-          text: 'Enregistrer le contact',
+          title: 'iVision Agency',
+          text: 'Sauvegarder le contact',
         });
         return;
+      } catch (e) {
+        // L'utilisateur a annulé ou le partage a échoué, on passe au téléchargement
+        console.log("Partage annulé, passage au téléchargement classique");
       }
-    } catch (e) {
-      console.log("Partage natif échoué, passage au fallback", e);
     }
 
-    // Méthode 2 : Téléchargement Blob (Fallback standard)
-    try {
-      const blob = new Blob([vcardContent], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', fileName);
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      
-      link.click();
-      
-      // Nettoyage
-      setTimeout(() => {
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      }, 1000);
-    } catch (e) {
-      alert("Erreur lors du téléchargement. Veuillez essayer sur un autre navigateur.");
-    }
+    // 2. Fallback : Téléchargement classique (Blob)
+    const blob = new Blob([vcardContent], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 500);
   };
 
   const handleShare = async () => {
@@ -115,15 +109,11 @@ function App() {
           url: window.location.href,
         });
       } catch (err) {
-        // Ignorer l'erreur d'annulation utilisateur
+        // Erreur silencieuse (ex: annulation)
       }
     } else {
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        alert('Lien copié !');
-      } catch (err) {
-        alert('Partage impossible sur ce navigateur.');
-      }
+      navigator.clipboard.writeText(window.location.href);
+      alert('Lien copié !');
     }
   };
 
@@ -167,7 +157,7 @@ function App() {
                     </h1>
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 mt-2 animate-slide-up-fade delay-200">
                         <Zap size={14} className="text-brand-blue fill-current" />
-                        <span className="text-brand-blue font-bold text-xs uppercase tracking-wide">Marketing & Tech</span>
+                        <span className="text-brand-blue font-bold text-xs uppercase tracking-wide">Digital Marketing</span>
                     </div>
                     
                     <p className="text-slate-500 text-sm mt-4 px-2 leading-relaxed animate-slide-up-fade delay-300">
@@ -283,8 +273,6 @@ function App() {
     </div>
   );
 }
-
-// --- RENDERING ---
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
