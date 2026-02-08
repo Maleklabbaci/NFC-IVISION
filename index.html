@@ -33,6 +33,7 @@
               'float': 'float 6s ease-in-out infinite',
               'fade-up': 'fadeUp 0.5s ease-out forwards',
               'blob': 'blob 7s infinite',
+              'spin-slow': 'spin 3s linear infinite',
             },
             keyframes: {
               float: {
@@ -59,19 +60,29 @@
       body {
         scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
+        background-color: #F0F4F8;
       }
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       .animation-delay-2000 { animation-delay: 2s; }
       .animation-delay-4000 { animation-delay: 4s; }
+      
+      /* Style de l'écran de chargement (visible avant que React ne prenne le relais) */
       #root:empty::before {
-        content: 'Chargement...';
+        content: 'iVision Agency...';
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
         color: #2563EB;
-        font-family: sans-serif;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: .5; transform: scale(0.98); }
       }
     </style>
 
@@ -90,6 +101,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="text/babel" data-type="module" src="/index.tsx"></script>
+    <!-- CORRECTION ICI : Utilisation de ./index.tsx (relatif) au lieu de /index.tsx (absolu) -->
+    <script type="text/babel" data-type="module" src="./index.tsx"></script>
   </body>
 </html>
