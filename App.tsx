@@ -7,44 +7,49 @@ import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL, SERVICES } from './constants.ts';
 
 function App() {
   const handleDownloadVCard = () => {
-    // Nettoyage rapide du numéro pour le format international
+    // 1. Préparation rapide des données
     const cleanPhone = CONTACT_INFO.phone.replace(/[^\d+]/g, '');
-    const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    
-    // Construction optimisée de la vCard (Version 3.0 Standard)
-    // Structure allégée pour un téléchargement instantané
-    const vcardContent = [
+    // Timestamp pour forcer la mise à jour si le contact existe déjà
+    const revDate = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+    // 2. Construction du vCard (Standard V3.0 pour compatibilité max iOS/Android)
+    const vcardRows = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      'FN:iVision Agency',
-      'N:Agency;iVision;;;',
-      'ORG:iVision Agency',
-      'TITLE:Agence de Marketing Digital',
+      'FN:iVision Agency',                   // Nom complet affiché
+      'N:Agency;iVision;;;',                 // Structure Nom;Prénom...
+      'ORG:iVision Agency',                  // Entreprise
+      'TITLE:Agence de Marketing Digital',   // Titre
       `TEL;TYPE=WORK,VOICE,PREF:${cleanPhone}`,
       `EMAIL;TYPE=WORK,INTERNET:${CONTACT_INFO.email}`,
-      `URL;TYPE=WORK:${SOCIAL_LINKS.website}`, 
+      `URL;TYPE=WORK:${SOCIAL_LINKS.website}`,
+      // Echappement des virgules dans l'adresse
       `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\\,')};;;;`,
-      'NOTE:Marketing Digital • Stratégie • Création • Ads • Web',
-      `REV:${timestamp}`,
+      // Liste des services dans les notes
+      `NOTE:Expertise: ${SERVICES.map(s => s.title).join(' • ')}`,
+      `REV:${revDate}`,                      // Date de révision
       'END:VCARD'
-    ].join('\r\n');
+    ];
 
-    const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
+    const vcardString = vcardRows.join('\r\n');
+    const blob = new Blob([vcardString], { type: 'text/vcard;charset=utf-8' });
     
+    // 3. Déclenchement du téléchargement universel
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
+    link.style.display = 'none';
     link.href = url;
-    link.setAttribute('download', 'iVision-Contact.vcf');
-    document.body.appendChild(link);
+    link.setAttribute('download', 'contact-ivision.vcf');
     
-    // Déclenchement direct
+    // Ajout au DOM nécessaire pour certains navigateurs mobiles (Firefox Android, etc.)
+    document.body.appendChild(link);
     link.click();
     
-    // Nettoyage
+    // 4. Nettoyage
     setTimeout(() => {
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }, 200);
+      window.URL.revokeObjectURL(url);
+    }, 100);
   };
 
   const handleShare = async () => {
@@ -59,7 +64,7 @@ function App() {
         console.error('Erreur lors du partage:', err);
       }
     } else {
-      // Fallback for desktop or unsupported browsers
+      // Fallback
       navigator.clipboard.writeText(window.location.href);
       alert('Lien copié dans le presse-papier !');
     }
@@ -68,7 +73,7 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50 relative flex items-center justify-center p-4 font-sans">
         
-        {/* Arrière-plan animé fluide (Blobs) - Fixed pour rester en place lors du scroll */}
+        {/* Arrière-plan animé fluide (Blobs) */}
         <div className="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
             <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
             <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
@@ -130,7 +135,7 @@ function App() {
                             { icon: Linkedin, href: SOCIAL_LINKS.linkedin, color: "hover:text-blue-700" },
                             { icon: "tiktok", href: SOCIAL_LINKS.tiktok, color: "hover:text-black" }
                         ]
-                        .filter(social => social.href && social.href !== "") // Filter out empty links
+                        .filter(social => social.href && social.href !== "") 
                         .map((social, i) => (
                             <a 
                                 key={i}
