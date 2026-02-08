@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Megaphone, PenTool
 } from 'lucide-react';
 
-// --- CONSTANTES ---
+// --- CONFIGURATION ---
 
 const CONTACT_INFO = {
   phone: "+213 563 83 94 04",
@@ -48,12 +48,13 @@ const SERVICES = [
   },
 ];
 
-// --- APP PRINCIPALE ---
+// --- COMPOSANT APP ---
 
 function App() {
 
   const handleDownloadVCard = async () => {
-    // Construction de la vCard (Format V3.0 universel avec encodage UTF-8)
+    // 1. Préparation du contenu VCF (Format universel)
+    // Utilisation explicite de \r\n pour la compatibilité stricte vCard
     const vcardContent = [
       'BEGIN:VCARD',
       'VERSION:3.0',
@@ -66,45 +67,55 @@ function App() {
       `ADR;TYPE=WORK;CHARSET=UTF-8:;;${CONTACT_INFO.address};;;;`,
       'NOTE;CHARSET=UTF-8:Agence Marketing Digital',
       'END:VCARD'
-    ].join('\n');
+    ].join('\r\n');
 
     const fileName = "contact-ivision.vcf";
     const mimeType = "text/vcard";
-    const file = new File([vcardContent], fileName, { type: mimeType });
 
-    // 1. Essayer le partage natif (Meilleur pour iOS/Android récents)
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
+    // Création du Blob
+    const blob = new Blob([vcardContent], { type: `${mimeType};charset=utf-8` });
+    
+    // 2. Stratégie pour Mobile (Partage natif)
+    // C'est la meilleure méthode pour iOS et Android récents
+    try {
+      const file = new File([blob], fileName, { type: mimeType });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
           title: 'iVision Agency',
-          text: 'Sauvegarder le contact',
+          text: 'Ajouter aux contacts',
         });
-        return;
-      } catch (e) {
-        console.log("Partage annulé ou échoué, passage au téléchargement classique");
+        return; // Succès, on s'arrête là
       }
+    } catch (e) {
+      console.log("Partage annulé ou non supporté, passage au téléchargement direct");
     }
 
-    // 2. Fallback : Téléchargement classique (Blob) pour navigateurs in-app
-    const blob = new Blob([vcardContent], { type: "text/vcard;charset=utf-8" });
+    // 3. Stratégie de repli (Téléchargement)
     const url = URL.createObjectURL(blob);
     
-    // Création d'un lien temporaire
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', fileName);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    
-    // Déclenchement
-    link.click();
-    
-    // Nettoyage
-    setTimeout(() => {
+    // Détection iOS (iPhone/iPad)
+    // @ts-ignore
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (isIOS) {
+      // Sur iOS, window.location.href force souvent Safari à ouvrir l'invite "Ouvrir dans Contacts"
+      window.location.href = url;
+    } else {
+      // Sur Android/Desktop, la méthode classique du lien caché fonctionne mieux
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
       document.body.removeChild(link);
+    }
+    
+    // Nettoyage après un délai suffisant
+    setTimeout(() => {
       URL.revokeObjectURL(url);
-    }, 2000);
+    }, 3000);
   };
 
   const handleShare = async () => {
@@ -116,12 +127,12 @@ function App() {
           url: window.location.href,
         });
       } catch (err) {
-        // Erreur silencieuse (ex: annulation par l'utilisateur)
+        // Ignorer l'annulation
       }
     } else {
       try {
         await navigator.clipboard.writeText(window.location.href);
-        alert('Lien copié dans le presse-papier !');
+        alert('Lien copié !');
       } catch (err) {
         alert('Impossible de copier le lien.');
       }
@@ -131,14 +142,14 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50 relative flex items-center justify-center p-4 font-sans overflow-hidden">
         
-        {/* Arrière-plan animé fluide (Blobs) */}
+        {/* Arrière-plan animé fluide */}
         <div className="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
             <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob"></div>
             <div className="absolute top-0 -right-4 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob animation-delay-2000"></div>
             <div className="absolute -bottom-32 left-20 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob animation-delay-4000"></div>
         </div>
 
-        {/* Carte Principale Glassmorphism - Animation d'entrée Zoom */}
+        {/* Carte Principale */}
         <div className="w-full max-w-sm z-10 animate-scale-up my-4 perspective-1000">
             <div className="backdrop-blur-2xl bg-white/75 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-white/60 overflow-hidden relative transform transition-transform duration-500 hover:scale-[1.01]">
                 
@@ -148,7 +159,7 @@ function App() {
                 {/* Header Profil */}
                 <div className="pt-10 px-6 pb-6 text-center relative">
                     <div className="relative mx-auto w-32 h-32 mb-4 group cursor-pointer perspective-1000">
-                        {/* Cercle animé rotatif */}
+                        {/* Cercle animé */}
                         <div className="absolute -inset-1 bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 rounded-full animate-spin-slow opacity-80 blur-sm group-hover:opacity-100 transition duration-500"></div>
                         <div className="absolute -inset-1 bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 rounded-full animate-spin-slow opacity-40"></div>
                         
@@ -176,7 +187,7 @@ function App() {
                     </p>
                 </div>
 
-                {/* Grille d'Actions Rapides */}
+                {/* Actions Rapides */}
                 <div className="grid grid-cols-4 gap-3 px-6 mb-8">
                     {[
                         { icon: Phone, label: "Appel", href: `tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`, color: "bg-green-50 text-green-600 border-green-200", delay: "delay-300" },
@@ -199,7 +210,7 @@ function App() {
                     ))}
                 </div>
 
-                {/* Social Bar */}
+                {/* Réseaux Sociaux */}
                 <div className="px-6 mb-8 animate-slide-up-fade delay-500 opacity-0" style={{ animationFillMode: 'forwards' }}>
                     <div className="bg-gradient-to-r from-slate-50 to-white border border-white rounded-2xl p-2 flex justify-center gap-2 items-center shadow-inner">
                          {[
@@ -230,7 +241,7 @@ function App() {
                     </div>
                 </div>
 
-                {/* Section Services */}
+                {/* Services */}
                 <div className="px-6 pb-6">
                     <h3 className="text-xs font-black text-slate-300 uppercase tracking-widest mb-4 ml-1 flex items-center gap-2 animate-slide-up-fade delay-500 opacity-0" style={{ animationFillMode: 'forwards' }}>
                         <span className="w-8 h-[2px] bg-slate-200 rounded-full"></span>
@@ -258,7 +269,7 @@ function App() {
                     </div>
                 </div>
 
-                {/* Footer Actions */}
+                {/* Footer Buttons */}
                 <div className="p-4 bg-white/50 backdrop-blur-md border-t border-white/50 flex gap-3 animate-slide-up-fade opacity-0" style={{ animationDelay: '1000ms', animationFillMode: 'forwards' }}>
                     <button 
                         onClick={handleDownloadVCard}
@@ -285,14 +296,16 @@ function App() {
   );
 }
 
+// --- RENDER ---
+// Vérification stricte du point de montage
 const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+} else {
+  console.error("Erreur critique : L'élément #root est introuvable dans le DOM.");
 }
-
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
