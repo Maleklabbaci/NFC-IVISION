@@ -53,18 +53,20 @@ const SERVICES = [
 function App() {
 
   const handleDownloadVCard = async () => {
-    // Construction de la vCard (Format V3.0 universel)
+    // Construction de la vCard (Format V3.0 universel avec encodage UTF-8)
     const vcardContent = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      'FN:iVision Agency',
-      'ORG:iVision Agency',
+      'FN;CHARSET=UTF-8:iVision Agency',
+      'N;CHARSET=UTF-8:Agency;iVision;;;',
+      'ORG;CHARSET=UTF-8:iVision Agency',
       `TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phone}`,
-      `EMAIL;TYPE=WORK:${CONTACT_INFO.email}`,
-      `URL:${SOCIAL_LINKS.website}`, 
-      `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\\,')};;;;`,
+      `EMAIL;TYPE=WORK,INTERNET:${CONTACT_INFO.email}`,
+      `URL;TYPE=WORK:${SOCIAL_LINKS.website}`, 
+      `ADR;TYPE=WORK;CHARSET=UTF-8:;;${CONTACT_INFO.address};;;;`,
+      'NOTE;CHARSET=UTF-8:Agence Marketing Digital',
       'END:VCARD'
-    ].join('\r\n');
+    ].join('\n');
 
     const fileName = "contact-ivision.vcf";
     const mimeType = "text/vcard";
@@ -80,24 +82,29 @@ function App() {
         });
         return;
       } catch (e) {
-        // L'utilisateur a annulé ou le partage a échoué, on passe au téléchargement
-        console.log("Partage annulé, passage au téléchargement classique");
+        console.log("Partage annulé ou échoué, passage au téléchargement classique");
       }
     }
 
-    // 2. Fallback : Téléchargement classique (Blob)
-    const blob = new Blob([vcardContent], { type: mimeType });
+    // 2. Fallback : Téléchargement classique (Blob) pour navigateurs in-app
+    const blob = new Blob([vcardContent], { type: "text/vcard;charset=utf-8" });
     const url = URL.createObjectURL(blob);
+    
+    // Création d'un lien temporaire
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', fileName);
+    link.style.display = 'none';
     document.body.appendChild(link);
+    
+    // Déclenchement
     link.click();
     
+    // Nettoyage
     setTimeout(() => {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-    }, 500);
+    }, 2000);
   };
 
   const handleShare = async () => {
@@ -109,11 +116,15 @@ function App() {
           url: window.location.href,
         });
       } catch (err) {
-        // Erreur silencieuse (ex: annulation)
+        // Erreur silencieuse (ex: annulation par l'utilisateur)
       }
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Lien copié !');
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Lien copié dans le presse-papier !');
+      } catch (err) {
+        alert('Impossible de copier le lien.');
+      }
     }
   };
 
