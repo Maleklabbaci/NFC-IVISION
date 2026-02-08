@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Megaphone, PenTool
 } from 'lucide-react';
 
-// Données inlinées pour éviter les erreurs de chargement de module externe
+// Données inlinées pour éviter les erreurs de chargement
 const CONTACT_INFO = {
   phone: "+213 563 83 94 04",
   email: "contact@ivision.agency",
@@ -54,7 +54,7 @@ function App() {
       const revDate = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 
       // 2. Construction de la vCard (Format V3.0 compatible iOS/Android)
-      // Utilisation de \n pour assurer la compatibilité universelle
+      // Utilisation de \r\n pour respecter la norme RFC et compatibilité mobile
       const vcardRows = [
         'BEGIN:VCARD',
         'VERSION:3.0',
@@ -65,13 +65,13 @@ function App() {
         `TEL;TYPE=WORK,VOICE:${cleanPhone}`,
         `EMAIL;TYPE=WORK:${CONTACT_INFO.email}`,
         `URL;TYPE=WORK:${SOCIAL_LINKS.website}`,
-        `ADR;TYPE=WORK:;;${CONTACT_INFO.address};;;;`,
+        `ADR;TYPE=WORK:;;${CONTACT_INFO.address.replace(/,/g, '\\,')};;;;`,
         `NOTE:Marketing Digital • Branding • Ads • Web`,
         `REV:${revDate}`,
         'END:VCARD'
       ];
 
-      const vcardString = vcardRows.join('\n');
+      const vcardString = vcardRows.join('\r\n');
       const blob = new Blob([vcardString], { type: 'text/vcard;charset=utf-8' });
       
       // 3. Téléchargement robuste
@@ -82,14 +82,14 @@ function App() {
       document.body.appendChild(link);
       link.click();
       
-      // 4. Nettoyage
+      // 4. Nettoyage avec délai plus long pour mobile
       setTimeout(() => {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-      }, 500);
+      }, 3000); // 3 secondes pour assurer que le téléchargement démarre sur mobile
     } catch (error) {
-      console.error("Erreur lors du téléchargement de la vCard:", error);
-      alert("Impossible de télécharger la carte de visite. Veuillez réessayer.");
+      console.error("Erreur vCard:", error);
+      alert("Erreur lors du téléchargement. Réessayez.");
     }
   };
 
@@ -111,7 +111,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 relative flex items-center justify-center p-4 font-sans overflow-hidden">
+    <div className="min-h-screen bg-slate-50 relative flex items-center justify-center p-4 font-sans overflow-hidden text-slate-900">
         
         {/* Arrière-plan animé fluide */}
         <div className="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
