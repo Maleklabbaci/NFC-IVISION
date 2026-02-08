@@ -1,15 +1,58 @@
 import React from 'react';
 import { 
   Phone, Mail, MapPin, Share2, Download, 
-  Instagram, Linkedin, Facebook, MessageCircle, ArrowUpRight, Globe, Zap
+  Instagram, Linkedin, Facebook, MessageCircle, ArrowUpRight, Globe, Zap,
+  LayoutDashboard, Megaphone, PenTool
 } from 'lucide-react';
-import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL, SERVICES } from './constants.ts';
+
+// --- Constantes intégrées pour éviter les erreurs de chargement ---
+
+const CONTACT_INFO = {
+  phone: "+213 563 83 94 04",
+  email: "contact@ivision.agency",
+  address: "Tipaza, Algérie",
+  whatsapp: "https://wa.me/213563839404",
+};
+
+const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/ivision_agency/",
+  linkedin: "", 
+  facebook: "https://www.facebook.com/agencyivision/",
+  tiktok: "", 
+  website: "https://ivision.agency",
+};
+
+const LOGO_URL = "https://i.ibb.co/zHJBDrDT/i-VISIONLOGO.png";
+
+const SERVICES = [
+  {
+    title: "Marketing digital complet",
+    description: "Une stratégie 360° pour booster votre visibilité et votre croissance en ligne.",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Création de contenu",
+    description: "Design graphique et production vidéo pour captiver votre audience.",
+    icon: PenTool,
+  },
+  {
+    title: "Sponsoring Meta Ads",
+    description: "Campagnes publicitaires performantes sur Facebook et Instagram.",
+    icon: Megaphone,
+  },
+  {
+    title: "Website e-commerce",
+    description: "Conception de sites web modernes et optimisés pour vendre.",
+    icon: Globe,
+  },
+];
+
+// --- Composant Principal ---
 
 function App() {
-  // Suppression du state de chargement pour un affichage immédiat
 
-  const handleDownloadVCard = () => {
-    // vCard standard requires CRLF line breaks
+  const handleDownloadVCard = async () => {
+    // Contenu de la vCard
     const vcardContent = [
       'BEGIN:VCARD',
       'VERSION:3.0',
@@ -22,6 +65,24 @@ function App() {
       'END:VCARD'
     ].join('\r\n');
 
+    // Création du fichier pour le partage
+    const file = new File([vcardContent], "contact.vcf", { type: "text/vcard" });
+
+    // Tentative de partage natif (Idéal pour Mobile/iOS)
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: 'iVision Agency Contact',
+          text: 'Sauvegarder le contact iVision Agency',
+        });
+        return; // Succès, on arrête ici
+      } catch (error) {
+        console.log('Partage annulé ou échoué, passage au téléchargement classique', error);
+      }
+    }
+
+    // Fallback : Téléchargement direct (Desktop/Android ancien)
     const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -101,7 +162,7 @@ function App() {
                     </p>
                 </div>
 
-                {/* Grille d'Actions Rapides - Apparition en cascade */}
+                {/* Grille d'Actions Rapides */}
                 <div className="grid grid-cols-4 gap-3 px-6 mb-8">
                     {[
                         { icon: Phone, label: "Appel", href: `tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`, color: "bg-green-50 text-green-600 border-green-200", delay: "delay-300" },
@@ -124,7 +185,7 @@ function App() {
                     ))}
                 </div>
 
-                {/* Social Bar (Filtré) - Effet élastique */}
+                {/* Social Bar */}
                 <div className="px-6 mb-8 animate-slide-up-fade delay-500 opacity-0" style={{ animationFillMode: 'forwards' }}>
                     <div className="bg-gradient-to-r from-slate-50 to-white border border-white rounded-2xl p-2 flex justify-center gap-2 items-center shadow-inner">
                          {[
@@ -155,7 +216,7 @@ function App() {
                     </div>
                 </div>
 
-                {/* Section Services Compacte - Apparition Slide */}
+                {/* Section Services */}
                 <div className="px-6 pb-6">
                     <h3 className="text-xs font-black text-slate-300 uppercase tracking-widest mb-4 ml-1 flex items-center gap-2 animate-slide-up-fade delay-500 opacity-0" style={{ animationFillMode: 'forwards' }}>
                         <span className="w-8 h-[2px] bg-slate-200 rounded-full"></span>
@@ -183,7 +244,7 @@ function App() {
                     </div>
                 </div>
 
-                {/* Footer Actions - Boutons pulsants */}
+                {/* Footer Actions */}
                 <div className="p-4 bg-white/50 backdrop-blur-md border-t border-white/50 flex gap-3 animate-slide-up-fade opacity-0" style={{ animationDelay: '1000ms', animationFillMode: 'forwards' }}>
                     <button 
                         onClick={handleDownloadVCard}
