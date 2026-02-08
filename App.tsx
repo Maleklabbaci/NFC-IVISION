@@ -46,17 +46,17 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 relative flex items-center justify-center p-4 font-sans overflow-hidden">
+    <div className="min-h-screen bg-slate-50 relative flex items-center justify-center p-4 font-sans">
         
-        {/* Arrière-plan animé fluide (Blobs) */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
+        {/* Arrière-plan animé fluide (Blobs) - Fixed pour rester en place lors du scroll */}
+        <div className="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
             <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
             <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
             <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
         </div>
 
         {/* Carte Principale Glassmorphism */}
-        <div className="w-full max-w-sm z-10 animate-fade-up">
+        <div className="w-full max-w-sm z-10 animate-fade-up my-4">
             <div className="backdrop-blur-2xl bg-white/70 rounded-[2.5rem] shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/50 overflow-hidden relative">
                 
                 {/* Header Profil */}
