@@ -64,7 +64,7 @@ END:VCARD`;
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F4F8] flex items-center justify-center p-4 font-sans relative overflow-hidden text-slate-800 selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-slate-300 flex items-center justify-center p-4 font-sans relative overflow-hidden text-slate-800 selection:bg-blue-100 selection:text-blue-900">
       
       {/* Ambiance d'arrière-plan fluide et souple */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">

@@ -11,7 +11,7 @@ export const CONTACT_INFO = {
 // Social Media Links
 export const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/ivision_agency/",
-  linkedin: "", // Pas encore
+  linkedin: "https://www.linkedin.com/company/ivision-agency",
   facebook: "https://www.facebook.com/agencyivision/",
   tiktok: "", // Pas encore
   website: "https://ivision.agency/",
