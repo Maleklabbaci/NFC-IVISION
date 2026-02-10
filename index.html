@@ -23,17 +23,23 @@
               heading: ['"Outfit"', 'sans-serif'],
             },
             colors: {
-              brand: {
-                blue: '#2563EB',
-                dark: '#0F172A',
-                gray: '#F8FAFC',
+              // Charte Graphique iVision
+              ivision: {
+                blue: '#0052CC',      // Bleu Royal Profond
+                cyan: '#00C2FF',      // Cyan Digital
+                dark: '#0B1120',      // Noir bleuté
+                light: '#F0F9FF',     // Blanc bleuté
               }
+            },
+            backgroundImage: {
+              'ivision-gradient': 'linear-gradient(135deg, #0052CC 0%, #00C2FF 100%)',
             },
             animation: {
               'float': 'float 6s ease-in-out infinite',
               'fade-up': 'fadeUp 0.5s ease-out forwards',
               'blob': 'blob 7s infinite',
               'spin-slow': 'spin 3s linear infinite',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
               float: {
@@ -67,7 +73,8 @@
         position: fixed; /* Fixe le viewport */
         overscroll-behavior: none; /* Désactive le rebond (rubber-banding) */
         -webkit-overflow-scrolling: touch;
-        background-color: #CBD5E1; /* Slate-300 */
+        /* Background sophistiqué gris-bleu pour faire ressortir le blanc */
+        background-color: #CBD5E1; 
         touch-action: none; /* Désactive les gestes par défaut sauf exceptions */
       }
       
@@ -81,8 +88,6 @@
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       .animation-delay-2000 { animation-delay: 2s; }
       .animation-delay-4000 { animation-delay: 4s; }
-      
-      /* Suppression des styles de chargement précédents (#root:empty::before) */
     </style>
 
     <script type="importmap">
@@ -162,7 +167,7 @@
             target="_blank"
             rel="noopener noreferrer"
             aria-label={label}
-            className="group w-12 h-12 rounded-[18px] bg-white border border-slate-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-900 hover:scale-110 hover:shadow-lg hover:shadow-slate-900/20 active:scale-90 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+            className="group w-12 h-12 rounded-[18px] bg-white border border-slate-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] flex items-center justify-center text-slate-400 hover:text-white hover:bg-ivision-gradient hover:scale-110 hover:shadow-lg hover:shadow-blue-500/30 active:scale-90 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
           >
             <div className="transform group-hover:rotate-6 transition-transform duration-300">
               {icon}
@@ -171,17 +176,17 @@
         );
       };
 
-      const ActionWidget = ({ href, icon, label, sub, color, borderColor }) => (
+      const ActionWidget = ({ href, icon, label, sub, color, borderColor, iconColor }) => (
         <a 
           href={href}
           target={href.startsWith('http') ? '_blank' : undefined}
           rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
           className={`group flex flex-col items-center justify-center p-4 rounded-[28px] bg-white border border-slate-100 shadow-[0_4px_20px_-8px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_30px_-8px_rgba(0,0,0,0.1)] hover:-translate-y-1 ${borderColor} transition-all duration-300 cursor-pointer h-32 relative overflow-hidden`}
         >
-          <div className={`mb-3 p-3.5 rounded-[18px] transition-all duration-300 shadow-sm ${color} group-hover:scale-110`}>
+          <div className={`mb-3 p-3.5 rounded-[18px] transition-all duration-300 shadow-sm ${color} group-hover:scale-110 group-hover:bg-ivision-gradient group-hover:text-white`}>
             {icon}
           </div>
-          <span className="text-sm font-bold text-slate-700 leading-none mb-1.5 group-hover:text-slate-900">{label}</span>
+          <span className="text-sm font-bold text-slate-700 leading-none mb-1.5 group-hover:text-ivision-blue">{label}</span>
           <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide group-hover:text-slate-500">{sub}</span>
         </a>
       );
@@ -189,7 +194,6 @@
       // --- APPLICATION PRINCIPALE ---
       const App = () => {
         const [showServices, setShowServices] = useState(false);
-        // Initialisé à true pour éviter l'effet de fade-in au chargement
         const [mounted, setMounted] = useState(true);
 
         const handleShare = async () => {
@@ -247,55 +251,54 @@
             
             {/* Arrière-plan animé (Fixe) */}
             <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-              <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-blue-400/10 rounded-full blur-[120px] animate-float"></div>
-              <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-indigo-400/10 rounded-full blur-[120px] animate-float animation-delay-2000"></div>
-              <div className="absolute top-[40%] left-[40%] w-[40%] h-[40%] bg-purple-300/10 rounded-full blur-[100px] animate-float animation-delay-4000"></div>
+              <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-ivision-blue/10 rounded-full blur-[120px] animate-float"></div>
+              <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-ivision-cyan/10 rounded-full blur-[120px] animate-float animation-delay-2000"></div>
             </div>
 
-            {/* Scroll Container (Scrolle uniquement si le contenu dépasse, sans effet rebond sur le body) */}
+            {/* Scroll Container */}
             <div 
                 className="relative z-10 w-full h-full overflow-y-auto overflow-x-hidden scrollbar-hide overscroll-none"
-                style={{ touchAction: 'pan-y' }} // Réactive le scroll vertical tactile uniquement ici
+                style={{ touchAction: 'pan-y' }}
             >
                 <div className="min-h-full flex items-center justify-center p-4 py-8">
                     
                     {/* Carte Principale */}
                     <div 
-                      className={`w-full max-w-[400px] bg-gradient-to-br from-white/90 to-white/60 backdrop-blur-2xl rounded-[48px] shadow-[0_30px_60px_-12px_rgba(15,23,42,0.1),0_0_0_1px_rgba(255,255,255,0.7),0_0_40px_-10px_rgba(37,99,235,0.1)] p-6 flex flex-col gap-6 transition-all duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}
+                      className={`w-full max-w-[400px] bg-gradient-to-br from-white/95 to-white/70 backdrop-blur-2xl rounded-[48px] shadow-[0_30px_60px_-12px_rgba(15,23,42,0.1),0_0_0_1px_rgba(255,255,255,0.7),0_0_40px_-10px_rgba(0,82,204,0.15)] p-6 flex flex-col gap-6 transition-all duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}
                     >
                       
                       {/* En-tête */}
                       <div className="flex flex-col items-center pt-2 relative">
                           <button 
                             onClick={handleShare}
-                            className="absolute top-0 right-0 w-11 h-11 rounded-full bg-white/60 backdrop-blur-md shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)] border border-white text-slate-400 flex items-center justify-center hover:text-blue-600 hover:bg-white hover:shadow-[0_8px_16px_-4px_rgba(37,99,235,0.15)] hover:scale-105 active:scale-95 transition-all duration-300 group"
+                            className="absolute top-0 right-0 w-11 h-11 rounded-full bg-white/60 backdrop-blur-md shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)] border border-white text-slate-400 flex items-center justify-center hover:text-ivision-blue hover:bg-white hover:shadow-[0_8px_16px_-4px_rgba(0,194,255,0.2)] hover:scale-105 active:scale-95 transition-all duration-300 group"
                             aria-label="Partager"
                           >
                             <Share2 size={18} strokeWidth={2.5} className="group-hover:rotate-12 transition-transform duration-300" />
                           </button>
 
                           <div className="relative mb-6 group cursor-pointer" onClick={() => window.open(SOCIAL_LINKS.website, '_blank')}>
-                            <div className="absolute inset-0 bg-blue-400/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                            <div className="w-28 h-28 rounded-[36px] bg-white shadow-2xl shadow-blue-900/5 p-2 flex items-center justify-center transform group-hover:scale-105 transition-all duration-500 ease-out border border-white/50 relative z-10">
+                            <div className="absolute inset-0 bg-ivision-gradient blur-2xl rounded-full opacity-0 group-hover:opacity-40 transition-opacity duration-700"></div>
+                            <div className="w-28 h-28 rounded-[36px] bg-white shadow-2xl shadow-blue-900/10 p-2 flex items-center justify-center transform group-hover:scale-105 transition-all duration-500 ease-out border border-white/50 relative z-10">
                                 <img src={LOGO_URL} alt="iVision" className="w-full h-full object-contain rounded-[28px]" />
                             </div>
-                            <div className="absolute -bottom-1 -right-1 z-20 bg-blue-600 text-white p-1.5 rounded-full border-[3px] border-white shadow-lg animate-bounce animation-delay-4000">
+                            <div className="absolute -bottom-1 -right-1 z-20 bg-ivision-gradient text-white p-1.5 rounded-full border-[3px] border-white shadow-lg animate-bounce animation-delay-4000">
                                 <CheckCircle2 size={14} strokeWidth={3} />
                             </div>
                           </div>
 
                           <div className="text-center space-y-2">
-                            <h1 className="text-3xl font-heading font-extrabold text-slate-900 tracking-tight">
-                              iVision<span className="text-blue-600">.</span>
+                            <h1 className="text-3xl font-heading font-extrabold text-ivision-dark tracking-tight">
+                              iVision<span className="text-transparent bg-clip-text bg-ivision-gradient">.</span>
                             </h1>
                             
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest border border-blue-100/50 shadow-sm">
-                                <Sparkles size={10} className="fill-blue-600" />
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ivision-light text-ivision-blue text-[10px] font-bold uppercase tracking-widest border border-ivision-blue/20 shadow-sm">
+                                <Sparkles size={10} className="fill-ivision-blue" />
                                 Agence Digitale
                             </div>
                             
                             <p className="text-slate-500 text-[13px] mt-2 leading-relaxed max-w-[260px] font-medium mx-auto">
-                                Nous transformons votre vision en <span className="text-slate-800 font-bold">succès digital</span> mesurable.
+                                Nous transformons votre vision en <span className="text-ivision-dark font-bold">succès digital</span> mesurable.
                             </p>
                           </div>
 
@@ -314,15 +317,15 @@
                             icon={<Phone size={22} />} 
                             label="Appeler" 
                             sub="Mobile"
-                            color="text-blue-600 bg-blue-50/80 group-hover:bg-blue-600 group-hover:text-white"
-                            borderColor="hover:border-blue-200"
+                            color="text-ivision-blue bg-ivision-light"
+                            borderColor="hover:border-ivision-blue/30"
                         />
                         <ActionWidget 
                             href={CONTACT_INFO.whatsapp} 
                             icon={<MessageCircle size={22} />} 
                             label="WhatsApp" 
                             sub="Direct"
-                            color="text-emerald-600 bg-emerald-50/80 group-hover:bg-emerald-600 group-hover:text-white"
+                            color="text-emerald-600 bg-emerald-50"
                             borderColor="hover:border-emerald-200"
                         />
                         <ActionWidget 
@@ -330,15 +333,15 @@
                             icon={<Mail size={22} />} 
                             label="Email" 
                             sub="Contact"
-                            color="text-indigo-600 bg-indigo-50/80 group-hover:bg-indigo-600 group-hover:text-white"
-                            borderColor="hover:border-indigo-200"
+                            color="text-ivision-cyan bg-cyan-50"
+                            borderColor="hover:border-ivision-cyan/30"
                         />
                         <ActionWidget 
                             href={`https://maps.google.com/?q=${CONTACT_INFO.address}`} 
                             icon={<MapPin size={22} />} 
                             label="Bureau" 
                             sub="Localiser"
-                            color="text-violet-600 bg-violet-50/80 group-hover:bg-violet-600 group-hover:text-white"
+                            color="text-violet-600 bg-violet-50"
                             borderColor="hover:border-violet-200"
                         />
                       </div>
@@ -346,9 +349,9 @@
                       {/* CTA */}
                       <button 
                         onClick={downloadVCard}
-                        className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-[28px] font-bold shadow-[0_12px_24px_-8px_rgba(15,23,42,0.4)] hover:shadow-[0_20px_40px_-12px_rgba(15,23,42,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 group overflow-hidden relative"
+                        className="w-full py-4 bg-ivision-gradient text-white rounded-[28px] font-bold shadow-[0_12px_24px_-8px_rgba(0,82,204,0.4)] hover:shadow-[0_20px_40px_-12px_rgba(0,194,255,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 group overflow-hidden relative"
                       >
-                        <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-[28px]"></div>
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-[28px]"></div>
                         <div className="bg-white/10 p-1.5 rounded-full group-hover:bg-white/20 transition-colors relative z-10">
                           <Download size={18} strokeWidth={2.5} />
                         </div>
@@ -362,24 +365,24 @@
                             className="w-full px-6 py-5 flex items-center justify-between text-slate-800 font-bold text-[13px] tracking-wide uppercase hover:bg-white/50 transition-colors group"
                         >
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300">
-                                  <Sparkles size={14} strokeWidth={2.5} className="fill-blue-100" />
+                              <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-ivision-blue group-hover:scale-110 transition-transform duration-300">
+                                  <Sparkles size={14} strokeWidth={2.5} className="fill-ivision-cyan" />
                               </div>
-                              <span className="group-hover:text-blue-600 transition-colors">Nos Expertises</span>
+                              <span className="group-hover:text-ivision-blue transition-colors">Nos Expertises</span>
                             </div>
-                            <ChevronDown size={20} strokeWidth={2.5} className={`text-slate-400 group-hover:text-blue-500 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${showServices ? 'rotate-180' : ''}`} />
+                            <ChevronDown size={20} strokeWidth={2.5} className={`text-slate-400 group-hover:text-ivision-cyan transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${showServices ? 'rotate-180' : ''}`} />
                         </button>
                         
                         <div className={`transition-[max-height] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden ${showServices ? 'max-h-[800px]' : 'max-h-0'}`}>
                             <div className="px-5 pb-5 pt-0 space-y-3">
                               <div className="w-full h-px bg-slate-200/50 mb-4"></div>
                               {SERVICES.map((s, i) => (
-                                  <div key={i} className="flex items-start gap-4 p-4 rounded-[20px] bg-white border border-slate-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_-8px_rgba(0,0,0,0.06)] hover:border-blue-100 hover:-translate-y-0.5 transition-all duration-300 group/item">
-                                    <div className="text-blue-600 mt-1 bg-blue-50 p-2.5 rounded-2xl group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-300">
+                                  <div key={i} className="flex items-start gap-4 p-4 rounded-[20px] bg-white border border-slate-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_-8px_rgba(0,0,0,0.06)] hover:border-ivision-cyan/30 hover:-translate-y-0.5 transition-all duration-300 group/item">
+                                    <div className="text-ivision-blue mt-1 bg-ivision-light p-2.5 rounded-2xl group-hover/item:bg-ivision-gradient group-hover/item:text-white transition-colors duration-300">
                                         <s.icon size={18} strokeWidth={2} />
                                     </div>
                                     <div>
-                                        <div className="font-bold text-slate-800 text-sm leading-tight group-hover/item:text-blue-700 transition-colors">{s.title}</div>
+                                        <div className="font-bold text-slate-800 text-sm leading-tight group-hover/item:text-ivision-blue transition-colors">{s.title}</div>
                                         <p className="text-slate-500 text-xs mt-1.5 leading-relaxed font-medium">{s.description}</p>
                                     </div>
                                   </div>
@@ -389,7 +392,7 @@
                                 href={SOCIAL_LINKS.website} 
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="mt-6 flex items-center justify-center gap-2 w-full py-4 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 rounded-[20px] hover:bg-blue-600 hover:text-white hover:border-blue-600 hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all duration-300 group"
+                                className="mt-6 flex items-center justify-center gap-2 w-full py-4 text-xs font-bold text-ivision-blue bg-ivision-light border border-ivision-blue/20 rounded-[20px] hover:bg-ivision-blue hover:text-white hover:border-ivision-blue hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all duration-300 group"
                               >
                                   <Globe size={16} strokeWidth={2.5} className="group-hover:animate-spin-slow" />
                                   VISITER LE SITE OFFICIEL

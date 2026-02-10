@@ -21,7 +21,6 @@ import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL, SERVICES } from './constants.ts';
 
 const App: React.FC = () => {
   const [showServices, setShowServices] = useState(false);
-  // Initialisé à true pour que le contenu s'affiche immédiatement
   const [mounted, setMounted] = useState(true);
 
   const handleShare = async () => {
@@ -63,56 +62,55 @@ END:VCARD`;
   return (
     <div className="min-h-screen bg-slate-300 flex items-center justify-center p-4 font-sans relative overflow-hidden text-slate-800 selection:bg-blue-100 selection:text-blue-900">
       
-      {/* Ambiance d'arrière-plan fluide et souple */}
+      {/* Ambiance d'arrière-plan fluide (Thème iVision) */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-blue-200/40 rounded-full blur-[100px] animate-pulse mix-blend-multiply"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-indigo-200/40 rounded-full blur-[100px] animate-pulse animation-delay-4000 mix-blend-multiply"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-[#0052CC]/15 rounded-full blur-[100px] animate-pulse mix-blend-multiply"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-[#00C2FF]/15 rounded-full blur-[100px] animate-pulse animation-delay-4000 mix-blend-multiply"></div>
       </div>
 
-      {/* Carte Principale "Soft UI" */}
+      {/* Carte Principale "Soft UI" avec Charte iVision */}
       <div 
-        className={`relative z-10 w-full max-w-[400px] bg-white/70 backdrop-blur-3xl rounded-[48px] shadow-[0_30px_60px_-10px_rgba(50,50,93,0.1),0_18px_36px_-18px_rgba(0,0,0,0.05)] border border-white/50 p-6 flex flex-col gap-6 transition-all duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}
+        className={`relative z-10 w-full max-w-[400px] bg-white/70 backdrop-blur-3xl rounded-[48px] shadow-[0_30px_60px_-10px_rgba(11,17,32,0.1),0_18px_36px_-18px_rgba(0,0,0,0.05)] border border-white/60 p-6 flex flex-col gap-6 transition-all duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}
       >
         
-        {/* En-tête avec Bouton Partage */}
+        {/* En-tête */}
         <div className="flex flex-col items-center pt-2 relative">
-            {/* Bouton Partage Flottant - Style Glassmorphism */}
             <button 
               onClick={handleShare}
-              className="absolute top-0 right-0 w-11 h-11 rounded-full bg-white/60 backdrop-blur-md shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)] border border-white text-slate-400 flex items-center justify-center hover:text-blue-600 hover:bg-white hover:shadow-[0_8px_16px_-4px_rgba(37,99,235,0.15)] hover:scale-105 active:scale-95 transition-all duration-300 group"
+              className="absolute top-0 right-0 w-11 h-11 rounded-full bg-white/60 backdrop-blur-md shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)] border border-white text-slate-400 flex items-center justify-center hover:text-[#0052CC] hover:bg-white hover:shadow-[0_8px_16px_-4px_rgba(0,82,204,0.15)] hover:scale-105 active:scale-95 transition-all duration-300 group"
               aria-label="Partager"
             >
               <Share2 size={18} strokeWidth={2.5} className="group-hover:rotate-12 transition-transform duration-300" />
             </button>
 
-            {/* Logo avec lueur */}
+            {/* Logo avec lueur iVision */}
             <div className="relative mb-6 group cursor-pointer" onClick={() => window.open(SOCIAL_LINKS.website, '_blank')}>
-               <div className="absolute inset-0 bg-blue-400/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-               <div className="w-28 h-28 rounded-[36px] bg-white shadow-2xl shadow-blue-900/5 p-2 flex items-center justify-center transform group-hover:scale-105 transition-all duration-500 ease-out border border-white/50 relative z-10">
+               <div className="absolute inset-0 bg-gradient-to-tr from-[#0052CC] to-[#00C2FF] blur-2xl rounded-full opacity-0 group-hover:opacity-40 transition-opacity duration-700"></div>
+               <div className="w-28 h-28 rounded-[36px] bg-white shadow-2xl shadow-[#0052CC]/5 p-2 flex items-center justify-center transform group-hover:scale-105 transition-all duration-500 ease-out border border-white/50 relative z-10">
                   <img src={LOGO_URL} alt="iVision" className="w-full h-full object-contain rounded-[28px]" />
                </div>
-               <div className="absolute -bottom-1 -right-1 z-20 bg-blue-600 text-white p-1.5 rounded-full border-[3px] border-white shadow-lg animate-bounce animation-delay-4000">
+               <div className="absolute -bottom-1 -right-1 z-20 bg-gradient-to-r from-[#0052CC] to-[#00C2FF] text-white p-1.5 rounded-full border-[3px] border-white shadow-lg animate-bounce animation-delay-4000">
                   <CheckCircle2 size={14} strokeWidth={3} />
                </div>
             </div>
 
-            {/* Textes - Typographie plus douce */}
+            {/* Textes - Charte Typo */}
             <div className="text-center space-y-2">
-               <h1 className="text-3xl font-heading font-extrabold text-slate-900 tracking-tight">
-                 iVision<span className="text-blue-600">.</span>
+               <h1 className="text-3xl font-heading font-extrabold text-[#0B1120] tracking-tight">
+                 iVision<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0052CC] to-[#00C2FF]">.</span>
                </h1>
                
-               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest border border-blue-100/50 shadow-sm">
-                  <Sparkles size={10} className="fill-blue-600" />
+               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0F9FF] text-[#0052CC] text-[10px] font-bold uppercase tracking-widest border border-[#0052CC]/10 shadow-sm">
+                  <Sparkles size={10} className="fill-[#0052CC]" />
                   Agence Digitale
                </div>
                
                <p className="text-slate-500 text-[13px] mt-2 leading-relaxed max-w-[260px] font-medium mx-auto">
-                  Nous transformons votre vision en <span className="text-slate-800 font-bold">succès digital</span> mesurable.
+                  Nous transformons votre vision en <span className="text-[#0B1120] font-bold">succès digital</span> mesurable.
                </p>
             </div>
 
-            {/* Réseaux Sociaux - Style "Soft" */}
+            {/* Réseaux Sociaux */}
             <div className="flex items-center justify-center gap-4 mt-6">
                <SocialBtn href={SOCIAL_LINKS.instagram} icon={<Instagram size={20} />} label="Instagram" delay="0" />
                <SocialBtn href={SOCIAL_LINKS.facebook} icon={<Facebook size={20} />} label="Facebook" delay="100" />
@@ -121,22 +119,22 @@ END:VCARD`;
             </div>
         </div>
 
-        {/* Grille d'actions - Boutons "Gummy" */}
+        {/* Grille d'actions */}
         <div className="grid grid-cols-2 gap-3.5">
            <ActionWidget 
               href={`tel:${CONTACT_INFO.phone}`} 
               icon={<Phone size={22} />} 
               label="Appeler" 
               sub="Mobile"
-              color="text-blue-600 bg-blue-50/80 group-hover:bg-blue-600 group-hover:text-white"
-              borderColor="hover:border-blue-200"
+              color="text-[#0052CC] bg-[#F0F9FF]"
+              borderColor="hover:border-[#0052CC]/30"
            />
            <ActionWidget 
               href={CONTACT_INFO.whatsapp} 
               icon={<MessageCircle size={22} />} 
               label="WhatsApp" 
               sub="Direct"
-              color="text-emerald-600 bg-emerald-50/80 group-hover:bg-emerald-600 group-hover:text-white"
+              color="text-emerald-600 bg-emerald-50"
               borderColor="hover:border-emerald-200"
            />
            <ActionWidget 
@@ -144,56 +142,56 @@ END:VCARD`;
               icon={<Mail size={22} />} 
               label="Email" 
               sub="Contact"
-              color="text-indigo-600 bg-indigo-50/80 group-hover:bg-indigo-600 group-hover:text-white"
-              borderColor="hover:border-indigo-200"
+              color="text-[#00C2FF] bg-cyan-50"
+              borderColor="hover:border-[#00C2FF]/30"
            />
            <ActionWidget 
               href={`https://maps.google.com/?q=${CONTACT_INFO.address}`} 
               icon={<MapPin size={22} />} 
               label="Bureau" 
               sub="Localiser"
-              color="text-violet-600 bg-violet-50/80 group-hover:bg-violet-600 group-hover:text-white"
+              color="text-violet-600 bg-violet-50"
               borderColor="hover:border-violet-200"
            />
         </div>
 
-        {/* CTA Principal - Dégradé & Ombre douce */}
+        {/* CTA Principal - Gradient Marque */}
         <button 
           onClick={downloadVCard}
-          className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-[28px] font-bold shadow-[0_12px_24px_-8px_rgba(15,23,42,0.4)] hover:shadow-[0_20px_40px_-12px_rgba(15,23,42,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 group overflow-hidden relative"
+          className="w-full py-4 bg-gradient-to-r from-[#0052CC] to-[#00C2FF] text-white rounded-[28px] font-bold shadow-[0_12px_24px_-8px_rgba(0,82,204,0.4)] hover:shadow-[0_20px_40px_-12px_rgba(0,194,255,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 group overflow-hidden relative"
         >
-           <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-[28px]"></div>
+           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-[28px]"></div>
            <div className="bg-white/10 p-1.5 rounded-full group-hover:bg-white/20 transition-colors relative z-10">
              <Download size={18} strokeWidth={2.5} />
            </div>
            <span className="tracking-wide relative z-10">Enregistrer Contact</span>
         </button>
 
-        {/* Section Services (Accordéon Fluide & Glass) */}
+        {/* Section Services */}
         <div className="bg-white/40 backdrop-blur-sm rounded-[32px] overflow-hidden border border-white/60 shadow-sm transition-all duration-300 hover:bg-white/60">
            <button 
               onClick={() => setShowServices(!showServices)}
               className="w-full px-6 py-5 flex items-center justify-between text-slate-800 font-bold text-[13px] tracking-wide uppercase hover:bg-white/50 transition-colors group"
            >
               <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300">
-                    <Sparkles size={14} strokeWidth={2.5} className="fill-blue-100" />
+                 <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-[#0052CC] group-hover:scale-110 transition-transform duration-300">
+                    <Sparkles size={14} strokeWidth={2.5} className="fill-[#00C2FF]" />
                  </div>
-                 <span className="group-hover:text-blue-600 transition-colors">Nos Expertises</span>
+                 <span className="group-hover:text-[#0052CC] transition-colors">Nos Expertises</span>
               </div>
-              <ChevronDown size={20} strokeWidth={2.5} className={`text-slate-400 group-hover:text-blue-500 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${showServices ? 'rotate-180' : ''}`} />
+              <ChevronDown size={20} strokeWidth={2.5} className={`text-slate-400 group-hover:text-[#00C2FF] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${showServices ? 'rotate-180' : ''}`} />
            </button>
            
            <div className={`transition-[max-height] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden ${showServices ? 'max-h-[800px]' : 'max-h-0'}`}>
               <div className="px-5 pb-5 pt-0 space-y-3">
                  <div className="w-full h-px bg-slate-200/50 mb-4"></div>
                  {SERVICES.map((s, i) => (
-                    <div key={i} className="flex items-start gap-4 p-4 rounded-[20px] bg-white border border-slate-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_-8px_rgba(0,0,0,0.06)] hover:border-blue-100 hover:-translate-y-0.5 transition-all duration-300 group/item">
-                       <div className="text-blue-600 mt-1 bg-blue-50 p-2.5 rounded-2xl group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-300">
+                    <div key={i} className="flex items-start gap-4 p-4 rounded-[20px] bg-white border border-slate-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_-8px_rgba(0,0,0,0.06)] hover:border-[#00C2FF]/30 hover:-translate-y-0.5 transition-all duration-300 group/item">
+                       <div className="text-[#0052CC] mt-1 bg-[#F0F9FF] p-2.5 rounded-2xl group-hover/item:bg-gradient-to-r group-hover/item:from-[#0052CC] group-hover/item:to-[#00C2FF] group-hover/item:text-white transition-all duration-300">
                           <s.icon size={18} strokeWidth={2} />
                        </div>
                        <div>
-                          <div className="font-bold text-slate-800 text-sm leading-tight group-hover/item:text-blue-700 transition-colors">{s.title}</div>
+                          <div className="font-bold text-slate-800 text-sm leading-tight group-hover/item:text-[#0052CC] transition-colors">{s.title}</div>
                           <p className="text-slate-500 text-xs mt-1.5 leading-relaxed font-medium">{s.description}</p>
                        </div>
                     </div>
@@ -203,7 +201,7 @@ END:VCARD`;
                    href={SOCIAL_LINKS.website} 
                    target="_blank"
                    rel="noopener noreferrer"
-                   className="mt-6 flex items-center justify-center gap-2 w-full py-4 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 rounded-[20px] hover:bg-blue-600 hover:text-white hover:border-blue-600 hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all duration-300 group"
+                   className="mt-6 flex items-center justify-center gap-2 w-full py-4 text-xs font-bold text-[#0052CC] bg-[#F0F9FF] border border-[#0052CC]/20 rounded-[20px] hover:bg-[#0052CC] hover:text-white hover:border-[#0052CC] hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all duration-300 group"
                  >
                     <Globe size={16} strokeWidth={2.5} className="group-hover:animate-spin-slow" />
                     VISITER LE SITE OFFICIEL
@@ -213,7 +211,7 @@ END:VCARD`;
            </div>
         </div>
 
-        {/* Footer Discret */}
+        {/* Footer */}
         <div className="text-center pt-2">
            <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-[0.2em] opacity-70">
              iVision Agency © {new Date().getFullYear()}
@@ -225,7 +223,7 @@ END:VCARD`;
   );
 };
 
-// Composant Bouton Social amélioré
+// Composant Bouton Social
 const SocialBtn = ({ href, icon, label, delay }: any) => {
   if (!href) return null;
   return (
@@ -234,7 +232,7 @@ const SocialBtn = ({ href, icon, label, delay }: any) => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="group w-12 h-12 rounded-[18px] bg-white border border-slate-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-900 hover:scale-110 hover:shadow-lg hover:shadow-slate-900/20 active:scale-90 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+      className="group w-12 h-12 rounded-[18px] bg-white border border-slate-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] flex items-center justify-center text-slate-400 hover:text-white hover:bg-gradient-to-tr hover:from-[#0052CC] hover:to-[#00C2FF] hover:scale-110 hover:shadow-lg hover:shadow-blue-500/30 active:scale-90 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
     >
       <div className="transform group-hover:rotate-6 transition-transform duration-300">
         {icon}
@@ -243,7 +241,7 @@ const SocialBtn = ({ href, icon, label, delay }: any) => {
   );
 };
 
-// Composant Widget Action amélioré
+// Composant Widget Action
 const ActionWidget = ({ href, icon, label, sub, color, borderColor }: any) => (
   <a 
     href={href}
@@ -251,10 +249,10 @@ const ActionWidget = ({ href, icon, label, sub, color, borderColor }: any) => (
     rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
     className={`group flex flex-col items-center justify-center p-4 rounded-[28px] bg-white border border-slate-100 shadow-[0_4px_20px_-8px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_30px_-8px_rgba(0,0,0,0.1)] hover:-translate-y-1 ${borderColor} transition-all duration-300 cursor-pointer h-32 relative overflow-hidden`}
   >
-    <div className={`mb-3 p-3.5 rounded-[18px] transition-all duration-300 shadow-sm ${color} group-hover:scale-110`}>
+    <div className={`mb-3 p-3.5 rounded-[18px] transition-all duration-300 shadow-sm ${color} group-hover:scale-110 group-hover:bg-gradient-to-r group-hover:from-[#0052CC] group-hover:to-[#00C2FF] group-hover:text-white`}>
       {icon}
     </div>
-    <span className="text-sm font-bold text-slate-700 leading-none mb-1.5 group-hover:text-slate-900">{label}</span>
+    <span className="text-sm font-bold text-slate-700 leading-none mb-1.5 group-hover:text-[#0052CC]">{label}</span>
     <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide group-hover:text-slate-500">{sub}</span>
   </a>
 );
