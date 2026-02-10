@@ -21,11 +21,8 @@ import { CONTACT_INFO, SOCIAL_LINKS, LOGO_URL, SERVICES } from './constants.ts';
 
 const App: React.FC = () => {
   const [showServices, setShowServices] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Initialisé à true pour que le contenu s'affiche immédiatement
+  const [mounted, setMounted] = useState(true);
 
   const handleShare = async () => {
     if (navigator.share) {

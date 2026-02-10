@@ -67,7 +67,7 @@
         position: fixed; /* Fixe le viewport */
         overscroll-behavior: none; /* Désactive le rebond (rubber-banding) */
         -webkit-overflow-scrolling: touch;
-        background-color: #CBD5E1; /* Changé vers slate-300 pour plus de contraste */
+        background-color: #CBD5E1; /* Slate-300 */
         touch-action: none; /* Désactive les gestes par défaut sauf exceptions */
       }
       
@@ -82,23 +82,7 @@
       .animation-delay-2000 { animation-delay: 2s; }
       .animation-delay-4000 { animation-delay: 4s; }
       
-      /* Style de l'écran de chargement */
-      #root:empty::before {
-        content: 'iVision Agency...';
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        color: #2563EB;
-        font-family: "Outfit", sans-serif;
-        font-weight: 700;
-        font-size: 1.25rem;
-        animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: .5; transform: scale(0.98); }
-      }
+      /* Suppression des styles de chargement précédents (#root:empty::before) */
     </style>
 
     <script type="importmap">
@@ -205,11 +189,8 @@
       // --- APPLICATION PRINCIPALE ---
       const App = () => {
         const [showServices, setShowServices] = useState(false);
-        const [mounted, setMounted] = useState(false);
-
-        useEffect(() => {
-          setMounted(true);
-        }, []);
+        // Initialisé à true pour éviter l'effet de fade-in au chargement
+        const [mounted, setMounted] = useState(true);
 
         const handleShare = async () => {
           if (navigator.share) {
@@ -262,7 +243,6 @@
 
         return (
           // Conteneur principal fixe (ne scrolle pas)
-          // Changement du bg de slate-200 à slate-300 pour plus de contraste
           <div className="fixed inset-0 w-full h-full bg-slate-300 font-sans overflow-hidden">
             
             {/* Arrière-plan animé (Fixe) */}
